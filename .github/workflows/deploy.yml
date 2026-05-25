@@ -23,9 +23,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo mkdir -p /var/www/html
-            sudo chown -R ec2-user:ec2-user /var/www/html
-            sudo chmod -R 755 /var/www/html
+            sudo mkdir -p /usr/share/nginx/html
+            sudo chown -R ec2-user:ec2-user /usr/share/nginx/html
+            sudo chmod -R 755 /usr/share/nginx/html
 
       # Step 3: Copy files to EC2 via SCP
       - name: Copy files to EC2
@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "index.html,style.css"
-          target: "/var/www/html/"
+          target: "/usr/share/nginx/html/"
 
       # Step 4: Restart Nginx on EC2
       - name: Restart Nginx on EC2
@@ -46,7 +46,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "===== Deployment started ====="
-            sudo chmod -R 755 /var/www/html
+            sudo chmod -R 755 /usr/share/nginx/html
             sudo systemctl restart nginx
             sudo systemctl status nginx --no-pager
             echo "===== Deployment complete ====="
